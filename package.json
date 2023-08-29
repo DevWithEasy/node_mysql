@@ -1,22 +1,27 @@
 {
-  "name": "nodejs_mysql",
+  "name": "nodejs_mysql_prisma",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "node index.js",
+    "server": "nodemon index.js",
+    "client": "npm run dev ---prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\" "
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "concurrently": "^8.2.1",
+    "morgan": "^1.10.0",
     "nodemon": "^2.0.20"
   },
   "dependencies": {
+    "@prisma/client": "^5.2.0",
     "cors": "^2.8.5",
     "express": "^4.18.2",
-    "morgan": "^1.10.0",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "prisma": "^5.2.0"
   }
 }
