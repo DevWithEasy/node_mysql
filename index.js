@@ -1,31 +1,41 @@
 const express = require('express');
-const cors = require('cors');
-const morgan = require('morgan');
-const initDatabase = require('./database/initDatabase');
+const errorHandler = require('./middlewares/errorHandler');
+const applyMidleware = require('./middlewares/middlewares');
+const {PrismaClient} = require('@prisma/client')
+
+const prisma = new PrismaClient()
+
 const app = express()
 //----------middleware---------
-app.use(cors());
-app.use(morgan('dev'));
-app.use(express.json())
-app.use(express.urlencoded({extended:false}))
-
-//----------middleware---------
-
-//---------database Connection-------
-
-initDatabase()
-
-//---------database Connection-------
+applyMidleware(app)
 
 //--------- router --------------
-const userRouter = require("./router/userRouter")
-app.use("/user",userRouter)
 
-//---------- router -------------
 
-app.get('/',function(req,res){
-  res.send('Hello World!');
+app.get('/',async(req,res)=>{
+  const alluers = await prisma.user.findMany()
+  res.json(alluers)
 })
+
+app.post('/',async(req,res)=>{
+  const newData = await prisma.user.create({
+    data : req.body
+  })
+  res.json(newData)
+
+  const createMany = await prisma.user.createMany({
+    data: [
+      { name: 'Bob', email: 'bob@prisma.io' },
+      { name: 'Bobo', email: 'bob@prisma.io' }, // Duplicate unique key!
+      { name: 'Yewande', email: 'yewande@prisma.io' },
+      { name: 'Angelique', email: 'angelique@prisma.io' },
+    ],
+    skipDuplicates: true, // Skip 'Bobo'
+  })
+})
+
+//error handler
+errorHandler(app)
 
 app.listen(3000,function() {
     console.log('Server listening on port')
