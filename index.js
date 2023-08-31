@@ -13,9 +13,13 @@ applyMidleware(app)
 //--------- router --------------
 
 
-app.get('/',async(req,res)=>{
+app.get('/user',async(req,res)=>{
   try {
-    const alluers = await prisma.user.findMany()
+    const alluers = await prisma.user.findMany({
+      include : {
+        contacts : true
+      }
+    })
     res.json(alluers)
   } catch (error) {
     res.json({
@@ -106,6 +110,7 @@ app.post('/contact/',async(req,res)=>{
   }
 
 })
+
 
 //error handler
 errorHandler(app)
