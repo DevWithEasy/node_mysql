@@ -1,120 +1,88 @@
 const express = require('express');
 const errorHandler = require('./middlewares/errorHandler');
 const applyMidleware = require('./middlewares/middlewares');
-const {PrismaClient} = require('@prisma/client')
-const bcrypt = require('bcrypt');
+const { PrismaClient } = require('@prisma/client')
+const path = require('path')
+const categories = require('./data/category.json');
+const duanames = require('./data/duanames.json');
+const duaAlls = require('./data/duadetails.json')
 
 const prisma = new PrismaClient()
 
 const app = express()
+
 //----------middleware---------
 applyMidleware(app)
+app.use(express.static(path.join(__dirname, 'public')))
 
 //--------- router --------------
 
-
-app.get('/user',async(req,res)=>{
+app.get('/', async (req, res) => {
   try {
-    const alluers = await prisma.user.findMany({
-      include : {
-        contacts : true
-      }
-    })
-    res.json(alluers)
+    const results = await prisma.category.findMany({})
+    res.send(results)
   } catch (error) {
-    res.json({
-      error : error.message
-    })
+    console.log(error)
   }
 })
 
-app.post('/user/',async(req,res)=>{
+app.get('/:id', async (req, res) => {
   try {
-    const {password} = req.body
-
-    const hashed = await bcrypt.hash(password , 10)
-
-    const user = await prisma.user.create({
-      data : {
-        ...req.body,
-        password : hashed,
-        image : '/image/users/user_default.png'
-      }
-    })
-
-    res.json(user)
-  
-  } catch (error) {
-    res.json({
-      error : error.message
-    })
-  }
-
-})
-
-app.put('/:id',async(req, res)=>{
-  try {
-    const updateData = await prisma.user.update({
-      where: {
-        id : parseInt(req.params.id)
-      },
-      data : {
-        name : req.body.name,
-        email : req.body.email
-      }
-    })
-    res.json(updateData)
-  } catch (error) {
-    res.json({
-      error : error.message
-    })
-  }
-})
-
-app.get('/contact/:id',async(req,res)=>{
-  try {
-    const contacts = await prisma.contact.findMany({
+    const results = await prisma.chapter.findMany({
       where : {
-        authorId : req.params.id
+        category_id : req.params.id
       },
       include : {
-        author : true
+        duas : true
       }
     })
-
-    res.json(contacts)
-  
+    res.send(results)
   } catch (error) {
-    res.json({
-      error : error.message
-    })
+    console.log(error)
   }
-
 })
 
-app.post('/contact/',async(req,res)=>{
+app.post('/category/:id', async (req, res) => {
+
   try {
-    const user = await prisma.contact.create({
-      data : {
-        ...req.body,
-        image : '/image/users/user_default.png'
-      }
-    })
+    // const results = await prisma.category.findMany({})
+    let results = []
 
-    res.json(user)
-  
+    duanames.filter(dua => dua.category === req.params.id)
+
+      .forEach(async (dua) => {
+        const data = await prisma.chapter.create({
+          data : {
+            category_id : "14d54f03-83ba-4f68-a3cf-23bb0966ab46",
+            name : dua.duaname,
+          }
+        })
+        const duadetail = duaAlls.find(data => data.dua_global_id === dua.dua_global_id)
+        await prisma.dua.create({
+          data : {
+            chapter_id : data.id,
+            arabic : duadetail.arabic,
+            arabic_diacless : duadetail.arabic_diacless,
+            reference : duadetail.reference,
+            top : duadetail.top,
+            translations : duadetail.translations,
+            transliteration : duadetail.transliteration,
+          }
+        })
+      })
+    res.send(results)
   } catch (error) {
-    res.json({
-      error : error.message
-    })
+    console.log(error)
   }
-
 })
+
+
+
 
 
 //error handler
 errorHandler(app)
 
-app.listen(3000,function() {
-    console.log('Server listening on port')
+app.listen(3000, function () {
+  console.log('Server listening on port')
 })

@@ -3,39 +3,34 @@ generator client {
 }
 
 datasource db {
-    provider = "mysql"
-    url      = env("DATABASE_URL")
+    provider = "sqlite"
+    url      = "file:./dev.db"
 }
 
-model User {
-    id        String    @id @default(uuid())
-    name      String
-    email     String    @unique
-    phone     String    @unique
-    password  String
-    image     String?
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    contacts  Contact[]
+model Category {
+    id       String    @id @default(uuid())
+    name     String
+    image    String
+    chapters Chapter[]
 }
 
-model Contact {
-    id         String    @id @default(uuid())
-    phone      String
-    name       String?
-    email      String?
-    image      String?
-    company    String?
-    job        String?
-    dob        DateTime?
-    note       String?
-    region     String?
-    street     String?
-    city       String?
-    postalCode String?
-    website    String?
-    author     User      @relation(fields: [authorId], references: [id])
-    authorId   String
-    createdAt  DateTime  @default(now())
-    updatedAt  DateTime  @updatedAt
+model Chapter {
+    id          String   @id @default(uuid())
+    category    Category @relation(fields: [category_id], references: [id])
+    category_id String
+    name        String
+    tags        String?
+    duas        Dua[]
+}
+
+model Dua {
+    id              String  @id @default(uuid())
+    chapter         Chapter @relation(fields: [chapter_id], references: [id])
+    chapter_id      String
+    arabic          String
+    arabic_diacless String
+    reference       String
+    top             String
+    translations    String
+    transliteration String
 }

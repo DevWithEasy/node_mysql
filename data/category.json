@@ -1,0 +1,74 @@
+[
+    {
+        "name": "ঘুম",
+        "image" : "/image/sleeping.svg"
+    },
+    {
+        "name": "সকাল - সন্ধ্যা",
+        "image" : "/image/morning-evening.svg"
+    },
+    {
+        "name": "পরিবার",
+        "image" : "/image/family.svg"
+    },
+    {
+        "name": "সামাজিক",
+        "image" : "/image/social.svg"
+    },
+    {
+        "name": "রামাদান - সিয়াম",
+        "image" : "/image/ramadan-fasting.svg"
+    },
+    {
+        "name": "হজ্জ - উমরা",
+        "image" : "/image/hajj.svg"
+    },
+    {
+        "name": "পবিত্রতা",
+        "image" : "/image/purifiaction.svg"
+    },
+    {
+        "name": "সালাত",
+        "image" : "/image/prayer.svg"
+    },
+    {
+        "name": "খাদ্য ও পানীয়",
+        "image" : "/image/food-drink.svg"
+    },
+    {
+        "name": "সম্পত্তি - রিজিক",
+        "image" : "/image/provision.svg"
+    },
+    {
+        "name": "সফর",
+        "image" : "/image/travel.svg"
+    },
+    {
+        "name": "প্রকৃতি",
+        "image" : "/image/nature.svg"
+    },
+    {
+        "name": "শুকরিয়া - অনুতাপ",
+        "image" : "/image/gratitude.svg"
+    },
+    {
+        "name": "অসুস্থতা - মৃত্যু",
+        "image" : "/image/sickness.svg"
+    },
+    {
+        "name": "আশ্রয় প্রার্থনা",
+        "image" : "/image/refuge.svg"
+    },
+    {
+        "name": "কুরআনের দোয়া",
+        "image" : "/image/quran.svg"
+    },
+    {
+        "name": "রুকইয়াহ",
+        "image" : "/image/rugyah.svg"
+    },
+    {
+        "name": "কাপড় পরিধান",
+        "image" : "/image/dressup.svg"
+    }
+]
